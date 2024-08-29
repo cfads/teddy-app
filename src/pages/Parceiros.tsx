@@ -1,5 +1,11 @@
+import Container from "../components/Container";
+
 const Parceiros = () => {
-  return <div>Parceiros</div>;
+  return (
+    <Container>
+      <h1>teste</h1>
+    </Container>
+  );
 };
 
 export default Parceiros;
