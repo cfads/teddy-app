@@ -1,5 +1,4 @@
 import Container from "../components/Container";
-import { IoMdAdd } from "react-icons/io";
 import { useQuery } from "react-query";
 import { Parceiro } from "../types/Parceiro";
 import TableParceiros from "../components/TableParceiros";
@@ -7,7 +6,8 @@ import { useState } from "react";
 import { fetchParceiros } from "../services/parceirosService";
 import ModalParceiros from "../components/ModalParceiros";
 import Snackbar from "../components/Snackbar";
-import { SnackbarCloseReason } from "@mui/material";
+import { Fab, SnackbarCloseReason } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
 
 const Parceiros = () => {
   const { data, error, isLoading, refetch } = useQuery<Parceiro[]>("fetchParceiros", fetchParceiros, {
@@ -47,9 +47,16 @@ const Parceiros = () => {
       <div className="flex flex-col justify-between gap-16">
         <h1 className="font-bold text-3xl">Parceiros</h1>
 
-        <button onClick={handleClickOpen} className="flex items-center gap-1 self-end bg-blue-300 px-2 py-3 rounded-xl">
-          <IoMdAdd /> <span>Novo Parceiro {data?.length}</span>
-        </button>
+        <Fab
+          onClick={handleClickOpen}
+          className="flex items-center gap-1 self-end bg-blue-300 px-2 py-3 rounded-xl"
+          color="primary"
+          aria-label="add"
+          variant="extended"
+        >
+          <AddIcon />
+          Adicionar Parceiro
+        </Fab>
       </div>
 
       {data && <TableParceiros data={data} />}
