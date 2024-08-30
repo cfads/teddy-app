@@ -44,8 +44,8 @@ const Parceiros = () => {
 
   return (
     <Container>
-      <div className="flex flex-col justify-between gap-16">
-        <h1 className="font-bold text-3xl">Parceiros</h1>
+      <div className="flex flex-col justify-between gap-8">
+        <h1 className="font-bold text-3xl">Nossos Parceiros</h1>
 
         <Fab
           onClick={handleClickOpen}

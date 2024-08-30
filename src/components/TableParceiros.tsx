@@ -28,7 +28,7 @@ const TableParceiros: React.FC<TableParceirosProps> = ({ data }) => {
   let paginatedRows = data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   return (
-    <Paper className="my-10">
+    <Paper className="mt-4 mb-10">
       <TableContainer>
         <Table>
           <TableHead>
