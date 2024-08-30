@@ -14,6 +14,8 @@ const Parceiros = () => {
     refetchOnWindowFocus: false,
   });
 
+  const [idEdit, setIdEdit] = useState<string>();
+
   const [open, setOpen] = useState(false);
   const [openSnack, setOpenSnack] = useState(false);
 
@@ -32,8 +34,9 @@ const Parceiros = () => {
     refetch();
   };
 
-  const handleClickOpen = () => {
+  const handleClickOpen = (id?: string) => {
     setOpen(true);
+    setIdEdit(id);
   };
 
   const handleClose = () => {
@@ -48,7 +51,7 @@ const Parceiros = () => {
         <h1 className="font-bold text-3xl">Nossos Parceiros</h1>
 
         <Fab
-          onClick={handleClickOpen}
+          onClick={() => handleClickOpen()}
           className="flex items-center gap-1 self-end bg-blue-300 px-2 py-3 rounded-xl"
           color="primary"
           aria-label="add"
@@ -59,9 +62,9 @@ const Parceiros = () => {
         </Fab>
       </div>
 
-      {data && <TableParceiros data={data} />}
+      {data && <TableParceiros data={data} handleClickOpen={handleClickOpen} />}
 
-      <ModalParceiros isOpen={open} handleClose={handleClose} handleSnack={handleSnack} handleRefetchData={handleRefresh} />
+      <ModalParceiros idEdit={idEdit} isOpen={open} handleClose={handleClose} handleSnack={handleSnack} handleRefetchData={handleRefresh} />
       <Snackbar open={openSnack} message="Parceiro cadastrado com sucesso!" handleClose={handleCloseSnack} />
     </Container>
   );

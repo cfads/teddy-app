@@ -4,7 +4,7 @@ export type Parceiro = {
   description: string;
   repositoryGit: string;
   urlDoc: string;
-  clients: Array<string | number>;
-  projects: Array<string | number>;
+  clients: Array<string>;
+  projects: Array<string>;
   id?: string;
 };

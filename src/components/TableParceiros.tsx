@@ -10,9 +10,10 @@ import Chip from "@mui/material/Chip";
 
 type TableParceirosProps = {
   data: Parceiro[];
+  handleClickOpen: (id?: string) => void;
 };
 
-const TableParceiros: React.FC<TableParceirosProps> = ({ data }) => {
+const TableParceiros: React.FC<TableParceirosProps> = ({ data, handleClickOpen }) => {
   const [page, setPage] = useState<number>(0);
   const [rowsPerPage, setRowsPerPage] = useState<number>(5);
 
@@ -68,7 +69,9 @@ const TableParceiros: React.FC<TableParceirosProps> = ({ data }) => {
                 <TableCell align="center">
                   <div className="flex justify-center gap-6 px-4">
                     <Tooltip title="Editar" arrow>
-                      <EditIcon className="cursor-pointer text-yellow-600" />
+                      <span onClick={() => handleClickOpen(row.id)}>
+                        <EditIcon className="cursor-pointer text-yellow-600" />
+                      </span>
                     </Tooltip>
                     <Tooltip title="Remover" arrow>
                       <DeleteIcon className="cursor-pointer text-red-900" />

@@ -3,18 +3,20 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { Box, Button, Chip, IconButton, TextField } from "@mui/material";
-import { ChangeEvent, useState } from "react";
+import { Box, Button, Chip, CircularProgress, IconButton, TextField } from "@mui/material";
+import { ChangeEvent, useEffect, useState } from "react";
 import { Add as AddIcon } from "@mui/icons-material";
 
-import { createParceiro } from "../services/parceirosService";
-import { useMutation } from "react-query";
+import { createParceiro, fetchParceiro, updateParceiro } from "../services/parceirosService";
+import { useMutation, useQuery } from "react-query";
+import { Parceiro } from "../types/Parceiro";
 
 type ModalParceirosProps = {
   isOpen: boolean;
   handleClose: () => void;
   handleSnack: () => void;
   handleRefetchData: () => void;
+  idEdit: string | undefined;
 };
 
 type FormValues = {
@@ -26,9 +28,7 @@ type FormValues = {
   projects: string[];
 };
 
-const ModalParceiros: React.FC<ModalParceirosProps> = ({ isOpen, handleClose, handleSnack, handleRefetchData }) => {
-  const id = 0;
-
+const ModalParceiros: React.FC<ModalParceirosProps> = ({ isOpen, handleClose, handleSnack, handleRefetchData, idEdit }) => {
   const [formValues, setFormValues] = useState<FormValues>({
     name: "",
     description: "",
@@ -93,8 +93,44 @@ const ModalParceiros: React.FC<ModalParceirosProps> = ({ isOpen, handleClose, ha
     },
   });
 
+  const updateMutation = useMutation(({ id, updatedData }: { id: string; updatedData: Partial<FormValues> }) => updateParceiro(id, updatedData), {
+    onSuccess: () => {
+      handleSnack();
+      handleRefetchData();
+      handleClose();
+    },
+    onError: (error) => {
+      console.error("Erro ao atualizar parceiro", error);
+    },
+  });
+
+  const {
+    data: parceiro,
+    error,
+    isLoading,
+  } = useQuery<Parceiro>(["parceiro", idEdit], () => fetchParceiro(idEdit!), {
+    enabled: !!idEdit,
+  });
+
+  useEffect(() => {
+    if (!parceiro) return;
+
+    setFormValues({
+      name: parceiro.name,
+      description: parceiro.description,
+      repositoryGit: parceiro.urlDoc,
+      urlDoc: parceiro.urlDoc,
+      clients: [...parceiro.clients],
+      projects: [...parceiro.projects],
+    });
+  }, [parceiro]);
+
   const handleSubmit = () => {
-    mutation.mutate({ ...formValues, createdAt: new Date().toISOString() });
+    if (idEdit) {
+      updateMutation.mutate({ id: idEdit, updatedData: formValues });
+    } else {
+      mutation.mutate({ ...formValues, createdAt: new Date().toISOString() });
+    }
   };
 
   return (
@@ -111,70 +147,74 @@ const ModalParceiros: React.FC<ModalParceirosProps> = ({ isOpen, handleClose, ha
       }}
     >
       <DialogTitle fontSize={28} id="alert-dialog-title">
-        {id ? "Edição de Parceiro" : "Cadastro de Parceiro"}
+        {idEdit ? "Edição de Parceiro" : "Cadastro de Parceiro"}
       </DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4 mt-3">
-            <TextField label="Nome" name="name" value={formValues.name} onChange={handleChange} variant="outlined" />
-            <TextField
-              label="Descrição"
-              name="description"
-              value={formValues.description}
-              onChange={handleChange}
-              variant="outlined"
-              multiline
-              rows={4}
-            />
-            <TextField label="Git" name="repositoryGit" value={formValues.repositoryGit} onChange={handleChange} variant="outlined" />
-            <TextField label="Documento" name="urlDoc" value={formValues.urlDoc} onChange={handleChange} variant="outlined" />
+          {idEdit && isLoading ? (
+            <CircularProgress className="m-auto" />
+          ) : (
+            <form onSubmit={handleSubmit} className="flex flex-col gap-4 mt-3">
+              <TextField label="Nome" name="name" value={formValues.name} onChange={handleChange} variant="outlined" />
+              <TextField
+                label="Descrição"
+                name="description"
+                value={formValues.description}
+                onChange={handleChange}
+                variant="outlined"
+                multiline
+                rows={4}
+              />
+              <TextField label="Git" name="repositoryGit" value={formValues.repositoryGit} onChange={handleChange} variant="outlined" />
+              <TextField label="Documento" name="urlDoc" value={formValues.urlDoc} onChange={handleChange} variant="outlined" />
 
-            <div className="flex flex-col gap-1">
-              <div className="flex">
-                <TextField
-                  label="Clientes"
-                  value={inputClientes}
-                  onChange={(e) => setInputClientes(e.target.value)}
-                  variant="outlined"
-                  className="mr-2 w-full"
-                />
-                <IconButton onClick={handleAddCliente} color="primary">
-                  <AddIcon />
-                </IconButton>
+              <div className="flex flex-col gap-1">
+                <div className="flex">
+                  <TextField
+                    label="Clientes"
+                    value={inputClientes}
+                    onChange={(e) => setInputClientes(e.target.value)}
+                    variant="outlined"
+                    className="mr-2 w-full"
+                  />
+                  <IconButton onClick={handleAddCliente} color="primary">
+                    <AddIcon />
+                  </IconButton>
+                </div>
+                <Box>
+                  {formValues.clients.map((cliente, index) => (
+                    <Chip key={index} label={cliente} onDelete={() => handleRemoveCliente(cliente)} style={{ margin: "4px" }} />
+                  ))}
+                </Box>
               </div>
-              <Box>
-                {formValues.clients.map((cliente, index) => (
-                  <Chip key={index} label={cliente} onDelete={() => handleRemoveCliente(cliente)} style={{ margin: "4px" }} />
-                ))}
-              </Box>
-            </div>
 
-            <div className="flex flex-col gap-1">
-              <div className="flex">
-                <TextField
-                  label="Projetos"
-                  value={inputProjetos}
-                  onChange={(e) => setInputProjetos(e.target.value)}
-                  variant="outlined"
-                  className="mr-2 w-full"
-                />
-                <IconButton onClick={handleAddProjeto} color="primary">
-                  <AddIcon />
-                </IconButton>
+              <div className="flex flex-col gap-1">
+                <div className="flex">
+                  <TextField
+                    label="Projetos"
+                    value={inputProjetos}
+                    onChange={(e) => setInputProjetos(e.target.value)}
+                    variant="outlined"
+                    className="mr-2 w-full"
+                  />
+                  <IconButton onClick={handleAddProjeto} color="primary">
+                    <AddIcon />
+                  </IconButton>
+                </div>
+                <Box>
+                  {formValues.projects.map((projeto, index) => (
+                    <Chip key={index} label={projeto} onDelete={() => handleRemoveProjeto(projeto)} style={{ margin: "4px" }} />
+                  ))}
+                </Box>
               </div>
-              <Box>
-                {formValues.projects.map((projeto, index) => (
-                  <Chip key={index} label={projeto} onDelete={() => handleRemoveProjeto(projeto)} style={{ margin: "4px" }} />
-                ))}
-              </Box>
-            </div>
-          </form>
+            </form>
+          )}
         </DialogContentText>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Cancelar</Button>
         <Button onClick={handleSubmit} autoFocus>
-          {id ? "Salvar" : "Cadastrar"}
+          {idEdit ? "Salvar" : "Cadastrar"}
         </Button>
       </DialogActions>
     </Dialog>
