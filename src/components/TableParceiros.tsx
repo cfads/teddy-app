@@ -5,7 +5,7 @@ import { formatDate } from "../utils/formatDate";
 import DescriptionIcon from "@mui/icons-material/Description";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination, Paper, Tooltip } from "@mui/material";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination, Paper, Tooltip, Typography } from "@mui/material";
 import Chip from "@mui/material/Chip";
 
 type TableParceirosProps = {
@@ -49,12 +49,42 @@ const TableParceiros: React.FC<TableParceirosProps> = ({ data, handleClickOpen, 
             {paginatedRows.map((row) => (
               <TableRow key={row.id}>
                 <TableCell align="center">{formatDate(row.createdAt)}</TableCell>
-                <TableCell align="center">{row.name}</TableCell>
-                <TableCell align="center">{row.description}</TableCell>
+                <TableCell align="center">
+                  <Tooltip title={row.name}>
+                    <Typography
+                      variant="body2"
+                      noWrap
+                      style={{
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                        maxWidth: "240px",
+                      }}
+                    >
+                      {row.name}
+                    </Typography>
+                  </Tooltip>
+                </TableCell>
+                <TableCell align="center">
+                  <Tooltip title={row.description}>
+                    <Typography
+                      variant="body2"
+                      noWrap
+                      style={{
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                        maxWidth: "400px",
+                      }}
+                    >
+                      {row.description}
+                    </Typography>
+                  </Tooltip>
+                </TableCell>
                 <TableCell align="center">{row.repositoryGit}</TableCell>
                 <TableCell align="center">
                   <Tooltip title="Abrir Documento" arrow>
-                    <a href={row.urlDoc} target="_blank">
+                    <a href={row.urlDoc} target="_blank" rel="noopener noreferrer">
                       <DescriptionIcon className="text-gray-400" />
                     </a>
                   </Tooltip>
