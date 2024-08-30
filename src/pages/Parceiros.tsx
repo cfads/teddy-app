@@ -2,16 +2,15 @@ import Container from "../components/Container";
 import { IoMdAdd } from "react-icons/io";
 
 import { useQuery } from "react-query";
-import { fetchParceiros } from "../services/ParceirosService";
 import { Parceiro } from "../types/Parceiro";
 import TableParceiros from "../components/TableParceiros";
 
-import { useState } from "react";
-import Modal from "../components/Dialog";
+import { useRef, useState } from "react";
+import { fetchParceiros } from "../services/parceirosService";
+import ModalParceiros from "../components/ModalParceiros";
 
 const Parceiros = () => {
   const { data, error, isLoading } = useQuery<Parceiro[]>("fetchParceiros", fetchParceiros);
-
   const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
@@ -36,9 +35,7 @@ const Parceiros = () => {
 
       {data && <TableParceiros data={data} />}
 
-      <Modal isOpen={open} handleClose={handleClose} title="Cadastro de parceiro">
-        <p>teste</p>
-      </Modal>
+      <ModalParceiros isOpen={open} handleClose={handleClose} />
     </Container>
   );
 };
