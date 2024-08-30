@@ -14,7 +14,7 @@ import { Parceiro } from "../types/Parceiro";
 type ModalParceirosProps = {
   isOpen: boolean;
   handleClose: () => void;
-  handleSnack: () => void;
+  handleSnack: (message: string) => void;
   handleRefetchData: () => void;
   idEdit: string | undefined;
 };
@@ -84,7 +84,7 @@ const ModalParceiros: React.FC<ModalParceirosProps> = ({ isOpen, handleClose, ha
 
   const mutation = useMutation(createParceiro, {
     onSuccess: () => {
-      handleSnack();
+      handleSnack("Parceiro cadastrado com sucesso!");
       handleRefetchData();
       handleClose();
     },
@@ -95,7 +95,7 @@ const ModalParceiros: React.FC<ModalParceirosProps> = ({ isOpen, handleClose, ha
 
   const updateMutation = useMutation(({ id, updatedData }: { id: string; updatedData: Partial<FormValues> }) => updateParceiro(id, updatedData), {
     onSuccess: () => {
-      handleSnack();
+      handleSnack("Parceiro editado com sucesso!");
       handleRefetchData();
       handleClose();
     },

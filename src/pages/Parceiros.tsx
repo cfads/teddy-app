@@ -8,19 +8,24 @@ import ModalParceiros from "../components/ModalParceiros";
 import Snackbar from "../components/Snackbar";
 import { Fab, SnackbarCloseReason } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
+import ConfirmacaoParceiro from "../components/ConfirmacaoParceiro";
 
 const Parceiros = () => {
   const { data, error, isLoading, refetch } = useQuery<Parceiro[]>("fetchParceiros", fetchParceiros, {
     refetchOnWindowFocus: false,
   });
 
-  const [idEdit, setIdEdit] = useState<string>();
+  const [id, setId] = useState<string>();
 
   const [open, setOpen] = useState(false);
-  const [openSnack, setOpenSnack] = useState(false);
+  const [openConfirmation, setOpenConfirmation] = useState(false);
 
-  const handleSnack = () => {
+  const [openSnack, setOpenSnack] = useState(false);
+  const [messageSnack, setMessageSnack] = useState("");
+
+  const handleSnack = (message: string) => {
     setOpenSnack(true);
+    setMessageSnack(message);
   };
 
   const handleCloseSnack = (event?: React.SyntheticEvent | Event, reason?: SnackbarCloseReason) => {
@@ -36,11 +41,22 @@ const Parceiros = () => {
 
   const handleClickOpen = (id?: string) => {
     setOpen(true);
-    setIdEdit(id);
+    setId(id);
   };
 
   const handleClose = () => {
     setOpen(false);
+    setId(undefined);
+  };
+
+  const handleConfirmation = (id?: string) => {
+    setOpenConfirmation(true);
+    setId(id);
+  };
+
+  const handleCloseConfirmation = () => {
+    setOpenConfirmation(false);
+    setId(undefined);
   };
 
   if (isLoading) return <p>Loading...</p>;
@@ -62,10 +78,17 @@ const Parceiros = () => {
         </Fab>
       </div>
 
-      {data && <TableParceiros data={data} handleClickOpen={handleClickOpen} />}
+      {data && <TableParceiros data={data} handleClickOpen={handleClickOpen} handleConfirmation={handleConfirmation} />}
 
-      <ModalParceiros idEdit={idEdit} isOpen={open} handleClose={handleClose} handleSnack={handleSnack} handleRefetchData={handleRefresh} />
-      <Snackbar open={openSnack} message="Parceiro cadastrado com sucesso!" handleClose={handleCloseSnack} />
+      <ModalParceiros idEdit={id} isOpen={open} handleClose={handleClose} handleSnack={handleSnack} handleRefetchData={handleRefresh} />
+      <ConfirmacaoParceiro
+        idDelete={id}
+        open={openConfirmation}
+        handleClose={handleCloseConfirmation}
+        handleRefetchData={handleRefresh}
+        handleSnack={handleSnack}
+      />
+      <Snackbar open={openSnack} message={messageSnack} handleClose={handleCloseSnack} />
     </Container>
   );
 };

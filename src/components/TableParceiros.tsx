@@ -11,9 +11,10 @@ import Chip from "@mui/material/Chip";
 type TableParceirosProps = {
   data: Parceiro[];
   handleClickOpen: (id?: string) => void;
+  handleConfirmation: (id?: string) => void;
 };
 
-const TableParceiros: React.FC<TableParceirosProps> = ({ data, handleClickOpen }) => {
+const TableParceiros: React.FC<TableParceirosProps> = ({ data, handleClickOpen, handleConfirmation }) => {
   const [page, setPage] = useState<number>(0);
   const [rowsPerPage, setRowsPerPage] = useState<number>(5);
 
@@ -73,7 +74,7 @@ const TableParceiros: React.FC<TableParceirosProps> = ({ data, handleClickOpen }
                         <EditIcon className="cursor-pointer text-yellow-600" />
                       </span>
                     </Tooltip>
-                    <Tooltip title="Remover" arrow>
+                    <Tooltip onClick={() => handleConfirmation(row.id)} title="Remover" arrow>
                       <DeleteIcon className="cursor-pointer text-red-900" />
                     </Tooltip>
                   </div>

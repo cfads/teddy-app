@@ -25,3 +25,8 @@ export const fetchParceiro = async (id: string) => {
   const { data } = await api.get(`/v1/test/partners/${id}`);
   return data;
 };
+
+export const deleteParceiro = async (id: string) => {
+  const { data } = await api.delete(`/v1/test/partners/${id}`);
+  return data;
+};
