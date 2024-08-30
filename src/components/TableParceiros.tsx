@@ -5,7 +5,7 @@ import { formatDate } from "../utils/formatDate";
 import DescriptionIcon from "@mui/icons-material/Description";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination, Paper } from "@mui/material";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination, Paper, Tooltip } from "@mui/material";
 import Chip from "@mui/material/Chip";
 
 type TableParceirosProps = {
@@ -33,39 +33,47 @@ const TableParceiros: React.FC<TableParceirosProps> = ({ data }) => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Registro</TableCell>
-              <TableCell>Nome</TableCell>
-              <TableCell>Descrição</TableCell>
-              <TableCell>Git</TableCell>
-              <TableCell>Documento</TableCell>
-              <TableCell>Clientes</TableCell>
-              <TableCell>Projetos</TableCell>
-              <TableCell>Ação</TableCell>
+              <TableCell align="center">Registro</TableCell>
+              <TableCell align="center">Nome</TableCell>
+              <TableCell align="center">Descrição</TableCell>
+              <TableCell align="center">Git</TableCell>
+              <TableCell align="center">Documento</TableCell>
+              <TableCell align="center">Clientes</TableCell>
+              <TableCell align="center">Projetos</TableCell>
+              <TableCell align="center">Ações</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {paginatedRows.map((row) => (
               <TableRow key={row.id}>
-                <TableCell>{formatDate(row.createdAt)}</TableCell>
-                <TableCell>{row.name}</TableCell>
-                <TableCell>{row.description}</TableCell>
-                <TableCell>{row.repositoryGit}</TableCell>
-                <TableCell>
-                  <a href={row.urlDoc} target="_blank">
-                    <DescriptionIcon />
-                  </a>
+                <TableCell align="center">{formatDate(row.createdAt)}</TableCell>
+                <TableCell align="center">{row.name}</TableCell>
+                <TableCell align="center">{row.description}</TableCell>
+                <TableCell align="center">{row.repositoryGit}</TableCell>
+                <TableCell align="center">
+                  <Tooltip title="Abrir Documento" arrow>
+                    <a href={row.urlDoc} target="_blank">
+                      <DescriptionIcon className="text-gray-400" />
+                    </a>
+                  </Tooltip>
                 </TableCell>
-                <TableCell className="max-w-80">
+                <TableCell align="center" className="max-w-80">
                   {Array.isArray(row.clients) &&
                     row.clients.map((cliente, index) => <Chip className="m-1" key={index} label={cliente} size="small" />)}
                 </TableCell>
-                <TableCell className="max-w-80">
+                <TableCell align="center" className="max-w-80">
                   {Array.isArray(row.projects) &&
                     row.projects.map((project, index) => <Chip className="m-1" key={index} label={project} size="small" variant="outlined" />)}
                 </TableCell>
-                <TableCell>
-                  <EditIcon />
-                  <DeleteIcon />
+                <TableCell align="center">
+                  <div className="flex justify-center gap-6 px-4">
+                    <Tooltip title="Editar" arrow>
+                      <EditIcon className="cursor-pointer text-yellow-600" />
+                    </Tooltip>
+                    <Tooltip title="Remover" arrow>
+                      <DeleteIcon className="cursor-pointer text-red-900" />
+                    </Tooltip>
+                  </div>
                 </TableCell>
               </TableRow>
             ))}
