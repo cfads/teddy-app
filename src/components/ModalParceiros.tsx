@@ -6,6 +6,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { Box, Button, Chip, IconButton, TextField } from "@mui/material";
 import { ChangeEvent, useState } from "react";
 import { Add as AddIcon } from "@mui/icons-material";
+import { createParceiro } from "../services/parceirosService";
 
 type ModalParceirosProps = {
   isOpen: boolean;
@@ -13,24 +14,24 @@ type ModalParceirosProps = {
 };
 
 type FormValues = {
-  nome: string;
-  descricao: string;
-  git: string;
-  documento: string;
-  clientes: string[];
-  projetos: string[];
+  name: string;
+  description: string;
+  repositoryGit: string;
+  urlDoc: string;
+  clients: string[];
+  projects: string[];
 };
 
 const ModalParceiros: React.FC<ModalParceirosProps> = ({ isOpen, handleClose }) => {
   const id = 0;
 
   const [formValues, setFormValues] = useState<FormValues>({
-    nome: "",
-    descricao: "",
-    git: "",
-    documento: "",
-    clientes: [],
-    projetos: [],
+    name: "",
+    description: "",
+    repositoryGit: "",
+    urlDoc: "",
+    clients: [],
+    projects: [],
   });
 
   const [inputClientes, setInputClientes] = useState<string>("");
@@ -44,20 +45,20 @@ const ModalParceiros: React.FC<ModalParceirosProps> = ({ isOpen, handleClose }) 
   };
 
   const handleAddCliente = () => {
-    if (inputClientes && !formValues.clientes.includes(inputClientes)) {
+    if (inputClientes && !formValues.clients.includes(inputClientes)) {
       setFormValues({
         ...formValues,
-        clientes: [...formValues.clientes, inputClientes],
+        clients: [...formValues.clients, inputClientes],
       });
       setInputClientes("");
     }
   };
 
   const handleAddProjeto = () => {
-    if (inputProjetos && !formValues.projetos.includes(inputProjetos)) {
+    if (inputProjetos && !formValues.projects.includes(inputProjetos)) {
       setFormValues({
         ...formValues,
-        projetos: [...formValues.projetos, inputProjetos],
+        projects: [...formValues.projects, inputProjetos],
       });
       setInputProjetos("");
     }
@@ -66,19 +67,19 @@ const ModalParceiros: React.FC<ModalParceirosProps> = ({ isOpen, handleClose }) 
   const handleRemoveCliente = (clienteToRemove: string) => {
     setFormValues({
       ...formValues,
-      clientes: formValues.clientes.filter((cliente) => cliente !== clienteToRemove),
+      clients: formValues.clients.filter((cliente) => cliente !== clienteToRemove),
     });
   };
 
   const handleRemoveProjeto = (projetoToRemove: string) => {
     setFormValues({
       ...formValues,
-      projetos: formValues.projetos.filter((projeto) => projeto !== projetoToRemove),
+      projects: formValues.projects.filter((projeto) => projeto !== projetoToRemove),
     });
   };
 
   const handleSubmit = () => {
-    console.log(formValues);
+    createParceiro({ ...formValues, createdAt: new Date().toISOString() });
   };
 
   return (
@@ -100,18 +101,18 @@ const ModalParceiros: React.FC<ModalParceirosProps> = ({ isOpen, handleClose }) 
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
           <form onSubmit={handleSubmit} className="flex flex-col gap-4 mt-3">
-            <TextField label="Nome" name="nome" value={formValues.nome} onChange={handleChange} variant="outlined" />
+            <TextField label="Nome" name="name" value={formValues.name} onChange={handleChange} variant="outlined" />
             <TextField
               label="Descrição"
-              name="descricao"
-              value={formValues.descricao}
+              name="description"
+              value={formValues.description}
               onChange={handleChange}
               variant="outlined"
               multiline
               rows={4}
             />
-            <TextField label="Git" name="git" value={formValues.git} onChange={handleChange} variant="outlined" />
-            <TextField label="Documento" name="documento" value={formValues.documento} onChange={handleChange} variant="outlined" />
+            <TextField label="Git" name="repositoryGit" value={formValues.repositoryGit} onChange={handleChange} variant="outlined" />
+            <TextField label="Documento" name="urlDoc" value={formValues.urlDoc} onChange={handleChange} variant="outlined" />
 
             <div className="flex flex-col gap-1">
               <div className="flex">
@@ -127,7 +128,7 @@ const ModalParceiros: React.FC<ModalParceirosProps> = ({ isOpen, handleClose }) 
                 </IconButton>
               </div>
               <Box>
-                {formValues.clientes.map((cliente, index) => (
+                {formValues.clients.map((cliente, index) => (
                   <Chip key={index} label={cliente} onDelete={() => handleRemoveCliente(cliente)} style={{ margin: "4px" }} />
                 ))}
               </Box>
@@ -147,7 +148,7 @@ const ModalParceiros: React.FC<ModalParceirosProps> = ({ isOpen, handleClose }) 
                 </IconButton>
               </div>
               <Box>
-                {formValues.projetos.map((projeto, index) => (
+                {formValues.projects.map((projeto, index) => (
                   <Chip key={index} label={projeto} onDelete={() => handleRemoveProjeto(projeto)} style={{ margin: "4px" }} />
                 ))}
               </Box>

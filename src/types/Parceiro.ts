@@ -6,5 +6,5 @@ export type Parceiro = {
   urlDoc: string;
   clients: Array<string | number>;
   projects: Array<string | number>;
-  id: string;
+  id?: string;
 };

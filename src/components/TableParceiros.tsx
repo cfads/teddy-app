@@ -56,14 +56,12 @@ const TableParceiros: React.FC<TableParceirosProps> = ({ data }) => {
                   </a>
                 </TableCell>
                 <TableCell className="max-w-80">
-                  {row.clients?.map((cliente, index) => (
-                    <Chip className="m-1" key={index} label={cliente} size="small" />
-                  ))}
+                  {Array.isArray(row.clients) &&
+                    row.clients.map((cliente, index) => <Chip className="m-1" key={index} label={cliente} size="small" />)}
                 </TableCell>
                 <TableCell className="max-w-80">
-                  {row.projects?.map((project, index) => (
-                    <Chip className="m-1" key={index} label={project} size="small" variant="outlined" />
-                  ))}
+                  {Array.isArray(row.projects) &&
+                    row.projects.map((project, index) => <Chip className="m-1" key={index} label={project} size="small" variant="outlined" />)}
                 </TableCell>
                 <TableCell>
                   <EditIcon />

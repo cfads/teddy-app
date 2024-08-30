@@ -5,7 +5,7 @@ import { useQuery } from "react-query";
 import { Parceiro } from "../types/Parceiro";
 import TableParceiros from "../components/TableParceiros";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { fetchParceiros } from "../services/parceirosService";
 import ModalParceiros from "../components/ModalParceiros";
 
