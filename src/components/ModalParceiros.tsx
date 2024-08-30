@@ -6,11 +6,15 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { Box, Button, Chip, IconButton, TextField } from "@mui/material";
 import { ChangeEvent, useState } from "react";
 import { Add as AddIcon } from "@mui/icons-material";
+
 import { createParceiro } from "../services/parceirosService";
+import { useMutation } from "react-query";
 
 type ModalParceirosProps = {
   isOpen: boolean;
   handleClose: () => void;
+  handleSnack: () => void;
+  handleRefetchData: () => void;
 };
 
 type FormValues = {
@@ -22,7 +26,7 @@ type FormValues = {
   projects: string[];
 };
 
-const ModalParceiros: React.FC<ModalParceirosProps> = ({ isOpen, handleClose }) => {
+const ModalParceiros: React.FC<ModalParceirosProps> = ({ isOpen, handleClose, handleSnack, handleRefetchData }) => {
   const id = 0;
 
   const [formValues, setFormValues] = useState<FormValues>({
@@ -78,8 +82,19 @@ const ModalParceiros: React.FC<ModalParceirosProps> = ({ isOpen, handleClose }) 
     });
   };
 
+  const mutation = useMutation(createParceiro, {
+    onSuccess: () => {
+      handleSnack();
+      handleRefetchData();
+      handleClose();
+    },
+    onError: (error) => {
+      console.error("Erro ao criar parceiro", error);
+    },
+  });
+
   const handleSubmit = () => {
-    createParceiro({ ...formValues, createdAt: new Date().toISOString() });
+    mutation.mutate({ ...formValues, createdAt: new Date().toISOString() });
   };
 
   return (

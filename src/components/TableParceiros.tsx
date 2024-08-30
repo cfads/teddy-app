@@ -25,7 +25,7 @@ const TableParceiros: React.FC<TableParceirosProps> = ({ data }) => {
     setPage(0);
   };
 
-  const paginatedRows = data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+  let paginatedRows = data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   return (
     <Paper className="my-10">
