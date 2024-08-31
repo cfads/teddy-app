@@ -1,19 +1,63 @@
-import { Fab } from "@mui/material";
+import { Fab, SnackbarCloseReason } from "@mui/material";
 import Container from "../components/Shared/Container";
 import AddIcon from "@mui/icons-material/Add";
 import TableEmpresas from "../components/Empresas/TableEmpresas";
 import { useQuery } from "react-query";
 import { Empresa } from "../types/Empresa";
 import { fetchEmpresas } from "../services/empresasService";
+import ModalEmpresas from "../components/Empresas/ModalEmpresas";
+import { useState } from "react";
+import Snackbar from "../components/Shared/Snackbar";
 
 const Empresas = () => {
   const { data, error, isLoading, refetch } = useQuery<Empresa[]>("fetchEmpresas", fetchEmpresas, {
     refetchOnWindowFocus: false,
   });
 
-  const handleClickOpen = () => {};
+  const [id, setId] = useState<string>();
 
-  const handleConfirmation = () => {};
+  const [open, setOpen] = useState(false);
+  const [openConfirmation, setOpenConfirmation] = useState(false);
+
+  const [openSnack, setOpenSnack] = useState(false);
+  const [messageSnack, setMessageSnack] = useState("");
+
+  const handleSnack = (message: string) => {
+    setOpenSnack(true);
+    setMessageSnack(message);
+  };
+
+  const handleCloseSnack = (event?: React.SyntheticEvent | Event, reason?: SnackbarCloseReason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenSnack(false);
+  };
+
+  const handleRefresh = () => {
+    refetch();
+  };
+
+  const handleClickOpen = (id?: string) => {
+    setOpen(true);
+    setId(id);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setId(undefined);
+  };
+
+  const handleConfirmation = (id?: string) => {
+    setOpenConfirmation(true);
+    setId(id);
+  };
+
+  const handleCloseConfirmation = () => {
+    setOpenConfirmation(false);
+    setId(undefined);
+  };
+
   return (
     <Container>
       <div className="flex flex-col justify-between gap-8">
@@ -33,7 +77,8 @@ const Empresas = () => {
 
       {data && <TableEmpresas data={data} handleClickOpen={handleClickOpen} handleConfirmation={handleConfirmation} />}
 
-      {/* <ModalParceiros idEdit={id} isOpen={open} handleClose={handleClose} handleSnack={handleSnack} handleRefetchData={handleRefresh} />
+      <ModalEmpresas idEdit={id} isOpen={open} handleClose={handleClose} handleSnack={handleSnack} handleRefetchData={handleRefresh} />
+      {/*
       <ConfirmacaoParceiro
         idDelete={id}
         open={openConfirmation}
@@ -41,7 +86,8 @@ const Empresas = () => {
         handleRefetchData={handleRefresh}
         handleSnack={handleSnack}
       />
-      <Snackbar open={openSnack} message={messageSnack} handleClose={handleCloseSnack} /> */}
+       */}
+      <Snackbar open={openSnack} message={messageSnack} handleClose={handleCloseSnack} />
     </Container>
   );
 };

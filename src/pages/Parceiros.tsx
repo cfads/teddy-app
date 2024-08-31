@@ -59,8 +59,6 @@ const Parceiros = () => {
     setId(undefined);
   };
 
-  if (isLoading) return <p>Loading...</p>;
-
   return (
     <Container>
       <div className="flex flex-col justify-between gap-8">
