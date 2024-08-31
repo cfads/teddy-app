@@ -13,12 +13,15 @@ export function formatDate(dateToFormat: string): string {
 export function formatDateWithHour(dateString: string): string {
   const date = new Date(dateString);
 
-  const day = String(date.getUTCDate()).padStart(2, "0");
-  const month = String(date.getUTCMonth() + 1).padStart(2, "0");
-  const year = date.getUTCFullYear();
+  const utcOffset = -3;
+  const brDate = new Date(date.getTime() + utcOffset * 60 * 60 * 1000);
 
-  const hours = String(date.getUTCHours()).padStart(2, "0");
-  const minutes = String(date.getUTCMinutes()).padStart(2, "0");
+  const day = String(brDate.getUTCDate()).padStart(2, "0");
+  const month = String(brDate.getUTCMonth() + 1).padStart(2, "0");
+  const year = brDate.getUTCFullYear();
+
+  const hours = String(brDate.getUTCHours()).padStart(2, "0");
+  const minutes = String(brDate.getUTCMinutes()).padStart(2, "0");
 
   return `${day}/${month}/${year} às ${hours}:${minutes}`;
 }
