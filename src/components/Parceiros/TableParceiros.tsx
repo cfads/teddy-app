@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Parceiro } from "../types/Parceiro";
-import { formatDate } from "../utils/formatDate";
+import { Parceiro } from "../../types/Parceiro";
+import { formatDate } from "../../utils/formatDate";
 
 import DescriptionIcon from "@mui/icons-material/Description";
 import EditIcon from "@mui/icons-material/Edit";

@@ -7,9 +7,9 @@ import { Box, Button, Chip, CircularProgress, IconButton, TextField } from "@mui
 import { ChangeEvent, useEffect, useState } from "react";
 import { Add as AddIcon } from "@mui/icons-material";
 
-import { createParceiro, fetchParceiro, updateParceiro } from "../services/parceirosService";
+import { createParceiro, fetchParceiro, updateParceiro } from "../../services/parceirosService";
 import { useMutation, useQuery } from "react-query";
-import { Parceiro } from "../types/Parceiro";
+import { Parceiro } from "../../types/Parceiro";
 
 type ModalParceirosProps = {
   isOpen: boolean;

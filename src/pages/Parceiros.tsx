@@ -1,14 +1,14 @@
-import Container from "../components/Container";
+import Container from "../components/Shared/Container";
 import { useQuery } from "react-query";
 import { Parceiro } from "../types/Parceiro";
-import TableParceiros from "../components/TableParceiros";
+import TableParceiros from "../components/Parceiros/TableParceiros";
 import { useState } from "react";
 import { fetchParceiros } from "../services/parceirosService";
-import ModalParceiros from "../components/ModalParceiros";
-import Snackbar from "../components/Snackbar";
+import ModalParceiros from "../components/Parceiros/ModalParceiros";
+import Snackbar from "../components/Shared/Snackbar";
 import { Fab, SnackbarCloseReason } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import ConfirmacaoParceiro from "../components/ConfirmacaoParceiro";
+import ConfirmacaoParceiro from "../components/Parceiros/ConfirmacaoParceiro";
 
 const Parceiros = () => {
   const { data, error, isLoading, refetch } = useQuery<Parceiro[]>("fetchParceiros", fetchParceiros, {

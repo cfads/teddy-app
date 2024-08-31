@@ -1,7 +1,7 @@
 import { Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, useMediaQuery } from "@mui/material";
 import { useMutation, useQuery } from "react-query";
-import { Parceiro } from "../types/Parceiro";
-import { deleteParceiro } from "../services/parceirosService";
+import { Parceiro } from "../../types/Parceiro";
+import { deleteParceiro } from "../../services/parceirosService";
 
 type ConfirmacaoParceiro = {
   open: boolean;

@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { Menu } from "./components/Menu";
+import { Menu } from "./components/Shared/Menu";
 import Parceiros from "./pages/Parceiros";
 import Empresas from "./pages/Empresas";
 import Home from "./pages/Home";
