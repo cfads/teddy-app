@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { formatDate, formatDateWithHour } from "../../utils/formatDate";
-import { useLocation, useNavigate } from "react-router-dom";
 
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -15,42 +15,32 @@ type TableEmpresasProps = {
 };
 
 const TableEmpresas: React.FC<TableEmpresasProps> = ({ data, handleClickOpen, handleConfirmation }) => {
-  const location = useLocation();
-  const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  const getSearchParams = () => {
-    const searchParams = new URLSearchParams(location.search);
-    const pageParam = searchParams.get("page");
-    const sizeParam = searchParams.get("size");
-
-    return {
-      page: pageParam ? parseInt(pageParam, 10) : 0,
-      size: sizeParam ? parseInt(sizeParam, 10) : 5,
-    };
-  };
-
-  const { page: initialPage, size: initialSize } = getSearchParams();
-
-  const [page, setPage] = useState<number>(initialPage);
-  const [rowsPerPage, setRowsPerPage] = useState<number>(initialSize);
+  const [page, setPage] = useState<number>(Number(searchParams.get("page")) || 0);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(Number(searchParams.get("size")) || 5);
 
   useEffect(() => {
-    const searchParams = new URLSearchParams(location.search);
-    searchParams.set("page", page.toString());
-    searchParams.set("size", rowsPerPage.toString());
+    const newPage = Number(searchParams.get("page")) || 0;
+    const newSize = Number(searchParams.get("size")) || 5;
 
-    navigate({
-      search: searchParams.toString(),
-    });
-  }, [page, rowsPerPage, navigate]);
+    setPage(newPage);
+    setRowsPerPage(newSize);
+  }, [searchParams]);
 
   const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
     setPage(newPage);
+    searchParams.set("page", String(newPage));
+    setSearchParams(searchParams);
   };
 
   const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
+    const newSize = parseInt(event.target.value, 10);
+    setRowsPerPage(newSize);
     setPage(0);
+    searchParams.set("size", String(newSize));
+    searchParams.set("page", "0");
+    setSearchParams(searchParams);
   };
 
   let paginatedRows = data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
