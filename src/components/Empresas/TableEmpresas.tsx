@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { formatDate, formatDateWithHour } from "../../utils/formatDate";
 
-import DescriptionIcon from "@mui/icons-material/Description";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination, Paper, Tooltip, Typography } from "@mui/material";

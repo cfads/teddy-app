@@ -1,9 +1,9 @@
-import { Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, useMediaQuery } from "@mui/material";
 import { useMutation, useQuery } from "react-query";
-import { Parceiro } from "../../types/Parceiro";
-import { deleteParceiro } from "../../services/parceirosService";
+import { Empresa } from "../../types/Empresa";
+import { deleteEmpresa } from "../../services/empresasService";
+import { Button, CircularProgress, Dialog, DialogActions, DialogTitle } from "@mui/material";
 
-type ConfirmacaoParceiroProps = {
+type ConfirmacaoEmpresaProps = {
   open: boolean;
   handleClose: () => void;
   idDelete: string | undefined;
@@ -11,23 +11,23 @@ type ConfirmacaoParceiroProps = {
   handleRefetchData: () => void;
 };
 
-const ConfirmacaoParceiro: React.FC<ConfirmacaoParceiroProps> = ({ open, idDelete, handleClose, handleSnack, handleRefetchData }) => {
+const ConfirmacaoEmpresa: React.FC<ConfirmacaoEmpresaProps> = ({ open, idDelete, handleClose, handleSnack, handleRefetchData }) => {
   const {
-    data: parceiro,
+    data: empresa,
     error,
     isLoading,
-  } = useQuery<Parceiro>(["parceiro", idDelete], () => deleteParceiro(idDelete!), {
+  } = useQuery<Empresa>(["empresa", idDelete], () => deleteEmpresa(idDelete!), {
     enabled: !!idDelete,
   });
 
-  const deleteMutation = useMutation((id: string) => deleteParceiro(id), {
+  const deleteMutation = useMutation((id: string) => deleteEmpresa(id), {
     onSuccess: () => {
-      handleSnack("Parceiro removido com sucesso!");
+      handleSnack("Empresa removida com sucesso!");
       handleRefetchData();
       handleClose();
     },
     onError: (error) => {
-      console.error("Erro ao deletar parceiro", error);
+      console.error("Erro ao deletar empresa", error);
     },
   });
 
@@ -48,12 +48,12 @@ const ConfirmacaoParceiro: React.FC<ConfirmacaoParceiroProps> = ({ open, idDelet
         },
       }}
     >
-      {!parceiro ? (
+      {!empresa ? (
         <CircularProgress className="m-auto" />
       ) : (
         <>
           <DialogTitle id="responsive-dialog-title">
-            Tem certeza que deseja remover <strong>{parceiro?.name}</strong> ?
+            Tem certeza que deseja remover <strong>{`${empresa?.companyName} / ${empresa?.name}`}</strong> ?
           </DialogTitle>
 
           <DialogActions>
@@ -70,4 +70,4 @@ const ConfirmacaoParceiro: React.FC<ConfirmacaoParceiroProps> = ({ open, idDelet
   );
 };
 
-export default ConfirmacaoParceiro;
+export default ConfirmacaoEmpresa;

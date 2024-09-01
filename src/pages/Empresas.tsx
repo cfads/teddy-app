@@ -8,6 +8,7 @@ import { fetchEmpresas } from "../services/empresasService";
 import ModalEmpresas from "../components/Empresas/ModalEmpresas";
 import { useState } from "react";
 import Snackbar from "../components/Shared/Snackbar";
+import ConfirmacaoEmpresa from "../components/Empresas/ConfirmacaoEmpresa";
 
 const Empresas = () => {
   const { data, error, isLoading, refetch } = useQuery<Empresa[]>("fetchEmpresas", fetchEmpresas, {
@@ -78,15 +79,15 @@ const Empresas = () => {
       {data && <TableEmpresas data={data} handleClickOpen={handleClickOpen} handleConfirmation={handleConfirmation} />}
 
       <ModalEmpresas idEdit={id} isOpen={open} handleClose={handleClose} handleSnack={handleSnack} handleRefetchData={handleRefresh} />
-      {/*
-      <ConfirmacaoParceiro
+
+      <ConfirmacaoEmpresa
         idDelete={id}
         open={openConfirmation}
         handleClose={handleCloseConfirmation}
         handleRefetchData={handleRefresh}
         handleSnack={handleSnack}
       />
-       */}
+
       <Snackbar open={openSnack} message={messageSnack} handleClose={handleCloseSnack} />
     </Container>
   );
