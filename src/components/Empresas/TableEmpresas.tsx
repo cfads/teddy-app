@@ -29,6 +29,7 @@ const TableEmpresas: React.FC<TableEmpresasProps> = ({ data, handleClickOpen, ha
   }, [searchParams]);
 
   const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
+    event?.preventDefault();
     setPage(newPage);
     searchParams.set("page", String(newPage));
     setSearchParams(searchParams);

@@ -104,11 +104,7 @@ const ModalParceiros: React.FC<ModalParceirosProps> = ({ isOpen, handleClose, ha
     },
   });
 
-  const {
-    data: parceiro,
-    error,
-    isLoading,
-  } = useQuery<Parceiro>(["parceiro", idEdit], () => fetchParceiro(idEdit!), {
+  const { data: parceiro, isLoading } = useQuery<Parceiro>(["parceiro", idEdit], () => fetchParceiro(idEdit!), {
     enabled: !!idEdit,
   });
 

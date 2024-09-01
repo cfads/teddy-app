@@ -8,7 +8,6 @@ import {
   DialogContentText,
   DialogTitle,
   FormControlLabel,
-  IconButton,
   TextField,
 } from "@mui/material";
 import { ChangeEvent, useEffect, useState } from "react";
@@ -69,11 +68,7 @@ const ModalEmpresas: React.FC<ModalEmpresasProps> = ({ isOpen, handleClose, hand
     },
   });
 
-  const {
-    data: empresa,
-    error,
-    isLoading,
-  } = useQuery<Empresa>(["empresa", idEdit], () => fetchEmpresa(idEdit!), {
+  const { data: empresa, isLoading } = useQuery<Empresa>(["empresa", idEdit], () => fetchEmpresa(idEdit!), {
     enabled: !!idEdit,
   });
 

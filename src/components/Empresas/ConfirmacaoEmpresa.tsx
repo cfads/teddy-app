@@ -12,11 +12,7 @@ type ConfirmacaoEmpresaProps = {
 };
 
 const ConfirmacaoEmpresa: React.FC<ConfirmacaoEmpresaProps> = ({ open, idDelete, handleClose, handleSnack, handleRefetchData }) => {
-  const {
-    data: empresa,
-    error,
-    isLoading,
-  } = useQuery<Empresa>(["empresa", idDelete], () => deleteEmpresa(idDelete!), {
+  const { data: empresa } = useQuery<Empresa>(["empresa", idDelete], () => deleteEmpresa(idDelete!), {
     enabled: !!idDelete,
   });
 

@@ -11,7 +11,7 @@ import AddIcon from "@mui/icons-material/Add";
 import ConfirmacaoParceiro from "../components/Parceiros/ConfirmacaoParceiro";
 
 const Parceiros = () => {
-  const { data, error, isLoading, refetch } = useQuery<Parceiro[]>("fetchParceiros", fetchParceiros, {
+  const { data, refetch } = useQuery<Parceiro[]>("fetchParceiros", fetchParceiros, {
     refetchOnWindowFocus: false,
   });
 
@@ -28,7 +28,7 @@ const Parceiros = () => {
     setMessageSnack(message);
   };
 
-  const handleCloseSnack = (event?: React.SyntheticEvent | Event, reason?: SnackbarCloseReason) => {
+  const handleCloseSnack = (reason?: SnackbarCloseReason) => {
     if (reason === "clickaway") {
       return;
     }

@@ -30,6 +30,7 @@ const TableParceiros: React.FC<TableParceirosProps> = ({ data, handleClickOpen, 
   }, [searchParams]);
 
   const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
+    event?.preventDefault();
     setPage(newPage);
     searchParams.set("page", String(newPage));
     setSearchParams(searchParams);

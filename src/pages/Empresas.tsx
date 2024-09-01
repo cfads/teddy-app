@@ -11,7 +11,7 @@ import Snackbar from "../components/Shared/Snackbar";
 import ConfirmacaoEmpresa from "../components/Empresas/ConfirmacaoEmpresa";
 
 const Empresas = () => {
-  const { data, error, isLoading, refetch } = useQuery<Empresa[]>("fetchEmpresas", fetchEmpresas, {
+  const { data, refetch } = useQuery<Empresa[]>("fetchEmpresas", fetchEmpresas, {
     refetchOnWindowFocus: false,
   });
 
@@ -28,7 +28,7 @@ const Empresas = () => {
     setMessageSnack(message);
   };
 
-  const handleCloseSnack = (event?: React.SyntheticEvent | Event, reason?: SnackbarCloseReason) => {
+  const handleCloseSnack = (reason?: SnackbarCloseReason) => {
     if (reason === "clickaway") {
       return;
     }

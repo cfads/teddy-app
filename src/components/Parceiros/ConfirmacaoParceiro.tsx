@@ -1,4 +1,4 @@
-import { Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, useMediaQuery } from "@mui/material";
+import { Button, CircularProgress, Dialog, DialogActions, DialogTitle } from "@mui/material";
 import { useMutation, useQuery } from "react-query";
 import { Parceiro } from "../../types/Parceiro";
 import { deleteParceiro } from "../../services/parceirosService";
@@ -12,11 +12,7 @@ type ConfirmacaoParceiroProps = {
 };
 
 const ConfirmacaoParceiro: React.FC<ConfirmacaoParceiroProps> = ({ open, idDelete, handleClose, handleSnack, handleRefetchData }) => {
-  const {
-    data: parceiro,
-    error,
-    isLoading,
-  } = useQuery<Parceiro>(["parceiro", idDelete], () => deleteParceiro(idDelete!), {
+  const { data: parceiro } = useQuery<Parceiro>(["parceiro", idDelete], () => deleteParceiro(idDelete!), {
     enabled: !!idDelete,
   });
 
