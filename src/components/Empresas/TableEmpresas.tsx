@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { formatDate, formatDateWithHour } from "../../utils/formatDate";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -14,8 +15,34 @@ type TableEmpresasProps = {
 };
 
 const TableEmpresas: React.FC<TableEmpresasProps> = ({ data, handleClickOpen, handleConfirmation }) => {
-  const [page, setPage] = useState<number>(0);
-  const [rowsPerPage, setRowsPerPage] = useState<number>(5);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const getSearchParams = () => {
+    const searchParams = new URLSearchParams(location.search);
+    const pageParam = searchParams.get("page");
+    const sizeParam = searchParams.get("size");
+
+    return {
+      page: pageParam ? parseInt(pageParam, 10) : 0,
+      size: sizeParam ? parseInt(sizeParam, 10) : 5,
+    };
+  };
+
+  const { page: initialPage, size: initialSize } = getSearchParams();
+
+  const [page, setPage] = useState<number>(initialPage);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(initialSize);
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    searchParams.set("page", page.toString());
+    searchParams.set("size", rowsPerPage.toString());
+
+    navigate({
+      search: searchParams.toString(),
+    });
+  }, [page, rowsPerPage, navigate]);
 
   const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
     setPage(newPage);
