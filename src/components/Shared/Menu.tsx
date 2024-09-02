@@ -16,7 +16,7 @@ export const Menu: React.FC = () => {
         </li>
       </ul>
 
-      <Link to="https://github.com/cfads/teddy-login" className="flex text-white items-center gap-2">
+      <Link to="https://cfads.github.io/teddy-login/" className="flex text-white items-center gap-2">
         <FiLogOut />
         <span className="font-medium">Sair</span>
       </Link>
