@@ -31,7 +31,6 @@ const Home = () => {
             <li>Axios</li>
             <li>React Router</li>
             <li>React Icons</li>
-            <li>Docker</li>
           </ul>
         </div>
       </div>
